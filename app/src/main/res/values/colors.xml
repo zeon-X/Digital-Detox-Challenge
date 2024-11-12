@@ -9,6 +9,7 @@
     <color name="update_btn">#FFAC00</color>
     <color name="stop_btn">#FF0000</color>
     <color name="red">#FF0000</color>
+    <color name="blue">#0000FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>

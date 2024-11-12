@@ -10,19 +10,23 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.aleehatech.digitaldetoxchallange.R
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AppAdapter(private val context: Context, private val appList: List<AppInfo>) :
     RecyclerView.Adapter<AppAdapter.AppViewHolder>() {
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("AppSuspensionPrefs", Context.MODE_PRIVATE)
+        context.getSharedPreferences("AppFocusModePrefs", Context.MODE_PRIVATE)
+
+    // Date formatter to convert between 12-hour and 24-hour format
+    private val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     inner class AppViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val appIcon: ImageView = view.findViewById(R.id.appIcon)
         val appName: TextView = view.findViewById(R.id.appName)
-        val infoButton: ImageButton = view.findViewById(R.id.app_suspension_info_btn)
-        val suspensionLayout: LinearLayout = view.findViewById(R.id.suspension_info_layout)
+        val infoButton: ImageButton = view.findViewById(R.id.app_focus_mode_info_btn)
+        val focusModeLayout: LinearLayout = view.findViewById(R.id.focus_mode_info_layout)
         val inputStartTime: EditText = view.findViewById(R.id.input_field_start)
         val inputEndTime: EditText = view.findViewById(R.id.input_field_end)
         val startBtn: Button = view.findViewById(R.id.start_btn)
@@ -40,10 +44,9 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
         holder.appName.text = appInfo.appName
         holder.appIcon.setImageDrawable(appInfo.appIcon)
 
-        // Check if the app is already suspended and set the background color of the button
-        if (isAppSuspended(appInfo.appName)) {
-            holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
-            // Set the suspension times in the EditText fields
+        // Check if the app is already in focus mode
+        if (isAppInFocusMode(appInfo.appName)) {
+            holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.blue, null))
             val startTime = sharedPreferences.getString("${appInfo.appName}-start", "Not Set")
             val endTime = sharedPreferences.getString("${appInfo.appName}-end", "Not Set")
             holder.inputStartTime.setText(startTime)
@@ -62,24 +65,23 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             showTimePickerDialog(holder.inputEndTime)
         }
 
-        // Toggle suspension layout visibility
+        // Toggle focus mode layout visibility
         holder.infoButton.setOnClickListener {
-            toggleSuspensionLayout(holder)
+            toggleFocusModeLayout(holder)
         }
         holder.itemView.setOnClickListener {
-            toggleSuspensionLayout(holder)
+            toggleFocusModeLayout(holder)
         }
 
-        // Handle start suspension button click
+        // Handle start focus mode button click
         holder.startBtn.setOnClickListener {
             val startTime = holder.inputStartTime.text.toString()
             val endTime = holder.inputEndTime.text.toString()
 
             if (validateTime(startTime, endTime)) {
-                suspendApp(appInfo.appName, startTime, endTime)
-                Toast.makeText(context, "${appInfo.appName} is suspended from $startTime to $endTime", Toast.LENGTH_SHORT).show()
-                // Update the button background color and the EditText fields
-                holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
+                enableFocusMode(appInfo.appName, startTime, endTime)
+                Toast.makeText(context, "${appInfo.appName} is in focus mode from $startTime to $endTime", Toast.LENGTH_SHORT).show()
+                holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.blue, null))
                 holder.inputStartTime.setText(startTime)
                 holder.inputEndTime.setText(endTime)
             } else {
@@ -87,15 +89,14 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             }
         }
 
-        // Handle update suspension button click
+        // Handle update focus mode button click
         holder.updateBtn.setOnClickListener {
             val startTime = holder.inputStartTime.text.toString()
             val endTime = holder.inputEndTime.text.toString()
 
             if (validateTime(startTime, endTime)) {
-                updateSuspensionTime(appInfo.appName, startTime, endTime)
-                Toast.makeText(context, "Updated suspension time for ${appInfo.appName}", Toast.LENGTH_SHORT).show()
-                // Update the EditText fields with the new time
+                updateFocusModeTime(appInfo.appName, startTime, endTime)
+                Toast.makeText(context, "Updated focus mode time for ${appInfo.appName}", Toast.LENGTH_SHORT).show()
                 holder.inputStartTime.setText(startTime)
                 holder.inputEndTime.setText(endTime)
             } else {
@@ -103,26 +104,21 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             }
         }
 
-        // Handle stop suspension button click
+        // Handle stop focus mode button click
         holder.stopBtn.setOnClickListener {
-            stopSuspension(appInfo.appName)
-            Toast.makeText(context, "${appInfo.appName} suspension stopped", Toast.LENGTH_SHORT).show()
-            // Reset the background color and the EditText fields
+            disableFocusMode(appInfo.appName)
+            Toast.makeText(context, "${appInfo.appName} focus mode stopped", Toast.LENGTH_SHORT).show()
             holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.transparent, null))
             holder.inputStartTime.setText("")
             holder.inputEndTime.setText("")
         }
     }
 
-    private fun toggleSuspensionLayout(holder: AppViewHolder) {
-        if (holder.suspensionLayout.visibility == View.GONE) {
-            holder.suspensionLayout.visibility = View.VISIBLE
-        } else {
-            holder.suspensionLayout.visibility = View.GONE
-        }
+    private fun toggleFocusModeLayout(holder: AppViewHolder) {
+        holder.focusModeLayout.visibility =
+            if (holder.focusModeLayout.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
-    @SuppressLint("DefaultLocale")
     private fun showTimePickerDialog(editText: EditText) {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -131,52 +127,52 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
         val timePickerDialog = TimePickerDialog(
             editText.context,
             { _, selectedHour, selectedMinute ->
-                val amPm = if (selectedHour < 12) "AM" else "PM"
-                val hourIn12HourFormat = if (selectedHour % 12 == 0) 12 else selectedHour % 12
-                val formattedTime = String.format("%02d:%02d %s", hourIn12HourFormat, selectedMinute, amPm)
+                val formattedTime = timeFormatter.format(calendar.apply {
+                    set(Calendar.HOUR_OF_DAY, selectedHour)
+                    set(Calendar.MINUTE, selectedMinute)
+                }.time)
                 editText.setText(formattedTime)
             },
             hour,
             minute,
-            false
+            true
         )
 
         timePickerDialog.show()
     }
 
     private fun validateTime(startTime: String, endTime: String): Boolean {
-        val startHour = startTime.substring(0, 2).toInt()
-        val endHour = endTime.substring(0, 2).toInt()
-
-        return endHour > startHour || (endHour == startHour && endTime.substring(3, 5).toInt() > startTime.substring(3, 5).toInt())
+        return try {
+            val start = timeFormatter.parse(startTime)
+            val end = timeFormatter.parse(endTime)
+            start != null && end != null && end.after(start)
+        } catch (e: Exception) {
+            false
+        }
     }
 
-    private fun suspendApp(appName: String, startTime: String, endTime: String) {
+    private fun enableFocusMode(appName: String, startTime: String, endTime: String) {
         val editor = sharedPreferences.edit()
         editor.putString("$appName-start", startTime)
         editor.putString("$appName-end", endTime)
-        editor.putBoolean("$appName-suspended", true)
+        editor.putBoolean("$appName-focusMode", true)
         editor.apply()
     }
 
-    private fun updateSuspensionTime(appName: String, startTime: String, endTime: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("$appName-start", startTime)
-        editor.putString("$appName-end", endTime)
-        editor.apply()
+    private fun updateFocusModeTime(appName: String, startTime: String, endTime: String) {
+        enableFocusMode(appName, startTime, endTime) // Simply re-use enableFocusMode for updates
     }
 
-    private fun stopSuspension(appName: String) {
+    private fun disableFocusMode(appName: String) {
         val editor = sharedPreferences.edit()
         editor.remove("$appName-start")
         editor.remove("$appName-end")
-        editor.putBoolean("$appName-suspended", false)
+        editor.putBoolean("$appName-focusMode", false)
         editor.apply()
     }
 
-    // Check if the app is already suspended
-    private fun isAppSuspended(appName: String): Boolean {
-        return sharedPreferences.getBoolean("$appName-suspended", false)
+    private fun isAppInFocusMode(appName: String): Boolean {
+        return sharedPreferences.getBoolean("$appName-focusMode", false)
     }
 
     override fun getItemCount() = appList.size
