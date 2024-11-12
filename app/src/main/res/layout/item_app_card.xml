@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <!--  App Info  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:weightSum="12">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/appIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="App Icon"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/app_suspension_info_btn"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_weight="3"
+            android:contentDescription="@string/home_app_card_info_icon"
+            app:srcCompat="@android:drawable/ic_dialog_info" />
+
+
+    </LinearLayout>
+    <!--    Suspension info -->
+    <LinearLayout
+        android:id="@+id/suspension_info_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/home_section_title_suspension_info" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/home_input_select_start_time"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/input_field_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:drawableEnd="@drawable/ic_input_baseline_access_time_24"
+                android:ems="10"
+                android:inputType="time"
+                android:hint="@string/home_hint_input_select_start_time"
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/home_input_select_end_time"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/input_field_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:drawableEnd="@drawable/ic_input_baseline_access_time_24"
+                android:ems="10"
+                android:inputType="time"
+                android:hint="@string/home_hint_input_select_end_time"
+                />
+        </LinearLayout>
+
+        <!--        ACTION BUTTONS-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+
+            android:orientation="horizontal"
+            android:weightSum="14">
+
+            <Button
+                android:id="@+id/start_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="@string/home_suspension_info_btn_start"
+                android:backgroundTint="@color/start_btn"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/update_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="4"
+                android:backgroundTint="@color/update_btn"
+                android:text="@string/home_suspension_info_btn_update"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/stop_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:backgroundTint="@color/stop_btn"
+                android:text="@string/home_suspension_info_btn_stop"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
