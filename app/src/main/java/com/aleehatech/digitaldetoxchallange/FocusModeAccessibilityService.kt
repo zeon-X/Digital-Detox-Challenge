@@ -6,8 +6,10 @@ import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
+import com.aleehatech.digitaldetoxchallange.ui.BlockScreenActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -51,7 +53,7 @@ class FocusModeAccessibilityService : AccessibilityService() {
         // Here you can check if the app is in focus mode and handle it
 
         Toast.makeText(applicationContext, "App Opened: $packageName", Toast.LENGTH_SHORT).show()
-        Log.d("FocusModeService", "App Opened: $packageName")
+        // Log.d("FocusModeService", "App Opened: $packageName")
 
         // Example: Block app if it's in focus mode or other conditions
         // (Fetch focus mode times and current state from SharedPreferences or database)
@@ -84,7 +86,7 @@ class FocusModeAccessibilityService : AccessibilityService() {
         // Get start and end times in milliseconds since midnight
         val startTime = startTimeCalendar.timeInMillis
         val endTime = endTimeCalendar.timeInMillis
-        Log.d("FocusModeService", "StartTime:$startTime EndTime:$endTime")
+        // Log.d("FocusModeService", "StartTime:$startTime EndTime:$endTime")
 
         // Get the current time in milliseconds from midnight
         val calendar = Calendar.getInstance()
@@ -95,14 +97,19 @@ class FocusModeAccessibilityService : AccessibilityService() {
             timeInMillis
         }
 
-        Log.d("FocusModeService", "Current Time:$currentTimeInMillisFromMidnight")
+        // Log.d("FocusModeService", "Current Time:$currentTimeInMillisFromMidnight")
 
 
         // Check if current time is within the focus mode start and end times
         if (currentTimeInMillisFromMidnight in startTime..endTime) {
             Toast.makeText(applicationContext, "Focus Mode Active! Blocking App.", Toast.LENGTH_SHORT).show()
-            Log.d("FocusModeService", "Focus Mode Active! Blocking App.")
+            // Log.d("FocusModeService", "Focus Mode Active! Blocking App.")
             // Additional logic to block app access goes here
+
+            // Launch the block screen overlay to prevent app usage
+            val intent = Intent(applicationContext, BlockScreenActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
 
 

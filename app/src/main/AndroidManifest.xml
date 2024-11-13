@@ -35,6 +35,8 @@
 
         <!-- Focus Mode Settings Activity -->
         <activity android:name=".ui.FocusModeSettingsActivity" />
+        <!-- Focus Mode Block Screen Activity -->
+        <activity android:name=".ui.BlockScreenActivity" />
 
         <!-- Accessibility Service Declaration -->
         <service

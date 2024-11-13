@@ -2,6 +2,7 @@ package com.aleehatech.digitaldetoxchallange.ui
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import com.aleehatech.digitaldetoxchallange.R

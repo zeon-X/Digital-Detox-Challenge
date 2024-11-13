@@ -10,7 +10,7 @@ import com.aleehatech.digitaldetoxchallange.R
 class FocusModeSettingsActivity : Activity() {
 
     private val sharedPreferences: SharedPreferences by lazy {
-        getSharedPreferences("FocusModePrefs", MODE_PRIVATE)
+        getSharedPreferences("AppFocusModePrefs", MODE_PRIVATE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
