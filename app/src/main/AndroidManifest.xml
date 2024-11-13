@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Required to access the list of installed applications -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <!-- Required to monitor app usage and apply restrictions -->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
@@ -19,6 +19,7 @@
         android:theme="@style/Theme.DigitalDetoxChallange"
         tools:targetApi="31">
 
+        <!-- Main Activity Declaration -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Focus Mode Settings Activity -->
+        <activity android:name=".ui.FocusModeSettingsActivity" />
 
         <!-- Accessibility Service Declaration -->
         <service
@@ -42,8 +46,6 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-
-
 
 
     </application>
