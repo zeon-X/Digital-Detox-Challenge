@@ -50,7 +50,7 @@ class FocusModeAccessibilityService : AccessibilityService() {
         // Here you can check if the app is in focus mode and handle it
 
         Toast.makeText(this, "App Opened: $packageName", Toast.LENGTH_SHORT).show()
-        // Log.d("FocusModeService", "App Opened: $packageName")
+        Log.d("FocusModeService", "App Opened: $packageName")
 
         // Example: Block app if it's in focus mode or other conditions
         // (Fetch focus mode times and current state from SharedPreferences or database)
