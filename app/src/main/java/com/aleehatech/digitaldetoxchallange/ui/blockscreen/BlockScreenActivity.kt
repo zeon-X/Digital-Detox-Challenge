@@ -1,10 +1,9 @@
-package com.aleehatech.digitaldetoxchallange.ui
+package com.aleehatech.digitaldetoxchallange.ui.blockscreen
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView

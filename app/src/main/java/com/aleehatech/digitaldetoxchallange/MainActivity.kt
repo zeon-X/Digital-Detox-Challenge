@@ -14,6 +14,7 @@ import com.aleehatech.digitaldetoxchallange.utils.Utils.promptUserToEnableAccess
 import com.aleehatech.digitaldetoxchallange.utils.Utils.requestUsageAccess
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.activity_main)
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -2,14 +2,11 @@ package com.aleehatech.digitaldetoxchallange
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.util.Log
-import com.aleehatech.digitaldetoxchallange.ui.BlockScreenActivity
+import com.aleehatech.digitaldetoxchallange.ui.blockscreen.BlockScreenActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -54,13 +51,6 @@ class FocusModeAccessibilityService : AccessibilityService() {
 
         // Toast.makeText(applicationContext, "App Opened: $packageName", Toast.LENGTH_SHORT).show()
         // Log.d("FocusModeService", "App Opened: $packageName")
-
-        // Example: Block app if it's in focus mode or other conditions
-        // (Fetch focus mode times and current state from SharedPreferences or database)
-        // if (isAppInFocusMode(packageName)) {
-        //     // Block access or show a restriction message
-        // }
-
 
 
         val sharedPref = getSharedPreferences("AppFocusModePrefs", Context.MODE_PRIVATE)

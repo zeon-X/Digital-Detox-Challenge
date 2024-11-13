@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.aleehatech.digitaldetoxchallange" />
+                  <option name="mobileSdkAppId" value="1:55419258221:android:71099b5f0ee32268384664" />
+                  <option name="projectId" value="digitaldetoxauth" />
+                  <option name="projectNumber" value="55419258221" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
