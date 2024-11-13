@@ -19,4 +19,5 @@
     <string name="home_suspension_info_btn_start">Start</string>
     <string name="home_suspension_info_btn_update">Update</string>
     <string name="home_suspension_info_btn_stop">Stop</string>
+    <string name="block_screen_focus_mode_is_on">Focus Mode is ON</string>
 </resources>
