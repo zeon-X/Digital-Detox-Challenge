@@ -8,6 +8,10 @@ import android.widget.Toast
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class FocusModeAccessibilityService : AccessibilityService() {
 
@@ -15,6 +19,8 @@ class FocusModeAccessibilityService : AccessibilityService() {
         super.onCreate()
         // Perform any necessary initialization here
     }
+
+    private val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     override fun onServiceConnected() {
         val info = AccessibilityServiceInfo().apply {
@@ -44,7 +50,7 @@ class FocusModeAccessibilityService : AccessibilityService() {
     private fun onAppOpened(packageName: String) {
         // Here you can check if the app is in focus mode and handle it
 
-        Toast.makeText(this, "App Opened: $packageName", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "App Opened: $packageName", Toast.LENGTH_SHORT).show()
         Log.d("FocusModeService", "App Opened: $packageName")
 
         // Example: Block app if it's in focus mode or other conditions
@@ -57,22 +63,46 @@ class FocusModeAccessibilityService : AccessibilityService() {
 
         val sharedPref = getSharedPreferences("AppFocusModePrefs", Context.MODE_PRIVATE)
 
-        val startTimeString = sharedPref.getString("AppName-start", "00:00") ?: "00:00"
-        val endTimeString = sharedPref.getString("AppName-end", "00:00") ?: "00:00"
+        val startTimeString = sharedPref.getString("$packageName-start", "00:00") ?: "00:00"
+        val endTimeString = sharedPref.getString("$packageName-end", "00:00") ?: "00:00"
+
+        // Parse the time strings into Date objects (these will default to today’s date)
+        val startTimeCalendar = Calendar.getInstance().apply {
+            time = timeFormatter.parse(startTimeString) ?: Date(0)
+            set(Calendar.YEAR, 1970)
+            set(Calendar.MONTH, 0)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
+        val endTimeCalendar = Calendar.getInstance().apply {
+            time = timeFormatter.parse(endTimeString) ?: Date(0)
+            set(Calendar.YEAR, 1970)
+            set(Calendar.MONTH, 0)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
 
 
-        // Example: If within focus mode time, block access to certain apps
-        val startTime = 0L // Start time (this should be fetched from SharedPreferences or database)
-        val endTime = 0L // End time (this should be fetched from SharedPreferences or database)
+        // Get start and end times in milliseconds since midnight
+        val startTime = startTimeCalendar.timeInMillis
+        val endTime = endTimeCalendar.timeInMillis
+        Log.d("FocusModeService", "StartTime:$startTime EndTime:$endTime")
 
-        // Logic to restrict access to apps based on the timeline (focus mode)
-        val currentTime = System.currentTimeMillis()
+        // Get the current time in milliseconds from midnight
+        val calendar = Calendar.getInstance()
+        val currentTimeInMillisFromMidnight = calendar.run {
+            set(Calendar.YEAR, 1970)
+            set(Calendar.MONTH, 0)
+            set(Calendar.DAY_OF_MONTH, 1)
+            timeInMillis
+        }
 
-        if (currentTime in startTime..endTime) {
-            // Logic to block the app from being accessed
-            // For example, if the event corresponds to an app in focus mode, prevent it
+        Log.d("FocusModeService", "Current Time:$currentTimeInMillisFromMidnight")
+
+
+        // Check if current time is within the focus mode start and end times
+        if (currentTimeInMillisFromMidnight in startTime..endTime) {
             Toast.makeText(applicationContext, "Focus Mode Active! Blocking App.", Toast.LENGTH_SHORT).show()
-            // You can block access to apps here by preventing the event from being passed further
+            Log.d("FocusModeService", "Focus Mode Active! Blocking App.")
+            // Additional logic to block app access goes here
         }
 
 
