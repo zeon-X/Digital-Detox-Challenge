@@ -14,8 +14,6 @@ class FocusModeAccessibilityService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         // Perform any necessary initialization here
-
-        //Log.d("FocusModeService", "FocusModeAccessibilityService Opened")
     }
 
     override fun onServiceConnected() {
@@ -29,15 +27,12 @@ class FocusModeAccessibilityService : AccessibilityService() {
 
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        //Log.d("FocusModeService", "got an event.")
         if (event == null) return
 
         // Check for relevant events indicating app launch or switch
         when (event.eventType) {
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
-
                 // Retrieve package name of the app currently in the foreground
-                // Log.d("appInfo", event.toString())
                 val packageName = event.packageName?.toString()
                 if (packageName != null) {
                     onAppOpened(packageName)
@@ -58,12 +53,10 @@ class FocusModeAccessibilityService : AccessibilityService() {
         //     // Block access or show a restriction message
         // }
 
-        // Logic to restrict access to apps based on the timeline (focus mode)
-        val currentTime = System.currentTimeMillis()
+
 
         val sharedPref = getSharedPreferences("AppFocusModePrefs", Context.MODE_PRIVATE)
 
-        // Replace "AppName" with the specific app name key
         val startTimeString = sharedPref.getString("AppName-start", "00:00") ?: "00:00"
         val endTimeString = sharedPref.getString("AppName-end", "00:00") ?: "00:00"
 
@@ -72,7 +65,10 @@ class FocusModeAccessibilityService : AccessibilityService() {
         val startTime = 0L // Start time (this should be fetched from SharedPreferences or database)
         val endTime = 0L // End time (this should be fetched from SharedPreferences or database)
 
-        if (currentTime >= startTime && currentTime <= endTime) {
+        // Logic to restrict access to apps based on the timeline (focus mode)
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime in startTime..endTime) {
             // Logic to block the app from being accessed
             // For example, if the event corresponds to an app in focus mode, prevent it
             Toast.makeText(applicationContext, "Focus Mode Active! Blocking App.", Toast.LENGTH_SHORT).show()
