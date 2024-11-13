@@ -46,7 +46,7 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
 
         // Check if the app is already in focus mode
         if (isAppInFocusMode(appInfo.appName)) {
-            holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.blue, null))
+            holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
             val startTime = sharedPreferences.getString("${appInfo.appName}-start", "Not Set")
             val endTime = sharedPreferences.getString("${appInfo.appName}-end", "Not Set")
             holder.inputStartTime.setText(startTime)
@@ -81,7 +81,7 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             if (validateTime(startTime, endTime)) {
                 enableFocusMode(appInfo.appName, startTime, endTime)
                 Toast.makeText(context, "${appInfo.appName} is in focus mode from $startTime to $endTime", Toast.LENGTH_SHORT).show()
-                holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.blue, null))
+                holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
                 holder.inputStartTime.setText(startTime)
                 holder.inputEndTime.setText(endTime)
             } else {

@@ -5,6 +5,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import android.content.Context
+import android.content.SharedPreferences
 
 class FocusModeAccessibilityService : AccessibilityService() {
 
@@ -13,9 +14,18 @@ class FocusModeAccessibilityService : AccessibilityService() {
         // Perform any necessary initialization here
     }
 
+
+
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         // Logic to restrict access to apps based on the timeline (focus mode)
         val currentTime = System.currentTimeMillis()
+
+        val sharedPref = getSharedPreferences("AppFocusModePrefs", Context.MODE_PRIVATE)
+
+        // Replace "AppName" with the specific app name key
+        val startTimeString = sharedPref.getString("AppName-start", "00:00") ?: "00:00"
+        val endTimeString = sharedPref.getString("AppName-end", "00:00") ?: "00:00"
+
 
         // Example: If within focus mode time, block access to certain apps
         val startTime = 0L // Start time (this should be fetched from SharedPreferences or database)
