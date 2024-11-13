@@ -1,9 +1,9 @@
 package com.aleehatech.digitaldetoxchallange.ui.home
 
-import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,11 +44,14 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
         holder.appName.text = appInfo.appName
         holder.appIcon.setImageDrawable(appInfo.appIcon)
 
+        // Log.d("appInfo", appInfo.toString())
+
         // Check if the app is already in focus mode
-        if (isAppInFocusMode(appInfo.appName)) {
+        if (isAppInFocusMode(appInfo.packageName,appInfo.appName)) {
             holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
-            val startTime = sharedPreferences.getString("${appInfo.appName}-start", "Not Set")
-            val endTime = sharedPreferences.getString("${appInfo.appName}-end", "Not Set")
+
+            val startTime = sharedPreferences.getString("${appInfo.packageName}-start", "Not Set")
+            val endTime = sharedPreferences.getString("${appInfo.packageName}-end", "Not Set")
             holder.inputStartTime.setText(startTime)
             holder.inputEndTime.setText(endTime)
         } else {
@@ -79,7 +82,7 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             val endTime = holder.inputEndTime.text.toString()
 
             if (validateTime(startTime, endTime)) {
-                enableFocusMode(appInfo.appName, startTime, endTime)
+                enableFocusMode(appInfo.packageName, appInfo.appName, startTime, endTime)
                 Toast.makeText(context, "${appInfo.appName} is in focus mode from $startTime to $endTime", Toast.LENGTH_SHORT).show()
                 holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.red, null))
                 holder.inputStartTime.setText(startTime)
@@ -95,7 +98,7 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
             val endTime = holder.inputEndTime.text.toString()
 
             if (validateTime(startTime, endTime)) {
-                updateFocusModeTime(appInfo.appName, startTime, endTime)
+                updateFocusModeTime(appInfo.packageName,appInfo.appName, startTime, endTime)
                 Toast.makeText(context, "Updated focus mode time for ${appInfo.appName}", Toast.LENGTH_SHORT).show()
                 holder.inputStartTime.setText(startTime)
                 holder.inputEndTime.setText(endTime)
@@ -106,7 +109,7 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
 
         // Handle stop focus mode button click
         holder.stopBtn.setOnClickListener {
-            disableFocusMode(appInfo.appName)
+            disableFocusMode(appInfo.packageName,appInfo.appName)
             Toast.makeText(context, "${appInfo.appName} focus mode stopped", Toast.LENGTH_SHORT).show()
             holder.infoButton.setBackgroundColor(context.resources.getColor(R.color.transparent, null))
             holder.inputStartTime.setText("")
@@ -151,28 +154,28 @@ class AppAdapter(private val context: Context, private val appList: List<AppInfo
         }
     }
 
-    private fun enableFocusMode(appName: String, startTime: String, endTime: String) {
+    private fun enableFocusMode(packageName:String, appName: String, startTime: String, endTime: String) {
         val editor = sharedPreferences.edit()
-        editor.putString("$appName-start", startTime)
-        editor.putString("$appName-end", endTime)
-        editor.putBoolean("$appName-focusMode", true)
+        editor.putString("$packageName-start", startTime)
+        editor.putString("$packageName-end", endTime)
+        editor.putBoolean("$packageName-focusMode", true)
         editor.apply()
     }
 
-    private fun updateFocusModeTime(appName: String, startTime: String, endTime: String) {
-        enableFocusMode(appName, startTime, endTime) // Simply re-use enableFocusMode for updates
+    private fun updateFocusModeTime(packageName:String, appName: String, startTime: String, endTime: String) {
+        enableFocusMode(packageName, appName, startTime, endTime) // Simply re-use enableFocusMode for updates
     }
 
-    private fun disableFocusMode(appName: String) {
+    private fun disableFocusMode(packageName:String,appName: String) {
         val editor = sharedPreferences.edit()
-        editor.remove("$appName-start")
-        editor.remove("$appName-end")
-        editor.putBoolean("$appName-focusMode", false)
+        editor.remove("$packageName-start")
+        editor.remove("$packageName-end")
+        editor.putBoolean("$packageName-focusMode", false)
         editor.apply()
     }
 
-    private fun isAppInFocusMode(appName: String): Boolean {
-        return sharedPreferences.getBoolean("$appName-focusMode", false)
+    private fun isAppInFocusMode(packageName:String,appName: String): Boolean {
+        return sharedPreferences.getBoolean("$packageName-focusMode", false)
     }
 
     override fun getItemCount() = appList.size

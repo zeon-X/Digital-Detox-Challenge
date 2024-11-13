@@ -1,6 +1,7 @@
 package com.aleehatech.digitaldetoxchallange.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +33,20 @@ class HomeFragment : Fragment() {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+
         // Observe apps LiveData and set Adapter
         homeViewModel.apps.observe(viewLifecycleOwner) { appList ->
+            // Log.d("appInfo", "from home fragment: " +appList.toString())
             // Ensure that you pass the correct Context (requireContext())
             recyclerView.adapter = AppAdapter(requireContext(), appList)
         }
     }
+
+
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
