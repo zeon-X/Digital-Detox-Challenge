@@ -24,9 +24,8 @@
 
         <!--    Sign In Declaration    -->
         <activity
-            android:name=".ui.auth.SignupActivity"
+            android:name=".ui.auth.SigninActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,17 +37,14 @@
         <activity
             android:name=".ui.auth.SignupActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar"/>
 
         <!-- Main Activity Declaration -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar"/>
 
 
         <!-- Focus Mode Block Screen Activity -->
