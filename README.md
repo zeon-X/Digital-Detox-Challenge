@@ -15,7 +15,7 @@ The **Digital Detox Challenge** app helps users manage their digital well-being 
 ---
 
 ## Project Structure
-
+```bash
 Digital-Detox-Challenge/
 ├── .gitignore
 ├── README.md
