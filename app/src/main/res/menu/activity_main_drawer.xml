@@ -9,11 +9,11 @@
             android:icon="@drawable/ic_menu_baseline_dashboard_24"
             android:title="@string/menu_1" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_stats"
             android:icon="@drawable/ic_menu_baseline_access_time_filled_24"
             android:title="@string/menu_2" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout_baseline_arrow_back_24"
             android:title="@string/menu_3" />
     </group>
