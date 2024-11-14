@@ -16,7 +16,70 @@ The **Digital Detox Challenge** app helps users manage their digital well-being 
 
 ## Project Structure
 
-Digital-Detox-Challenge/ ├── .gitignore ├── README.md ├── build.gradle.kts ├── gradle.properties ├── gradlew ├── gradlew.bat ├── settings.gradle.kts ├── app/ │ ├── build.gradle.kts │ ├── src/ │ │ ├── main/ │ │ │ ├── AndroidManifest.xml │ │ │ ├── java/com/aleehatech/digitaldetoxchallange/ │ │ │ │ ├── FocusModeAccessibilityService.kt │ │ │ │ ├── MainActivity.kt │ │ │ │ ├── ui/ │ │ │ │ │ ├── auth/ │ │ │ │ │ │ ├── SigninActivity.kt │ │ │ │ │ │ ├── SignupActivity.kt │ │ │ │ │ ├── home/ │ │ │ │ │ │ ├── HomeFragment.kt │ │ │ │ │ │ ├── AppAdapter.kt │ │ │ │ │ ├── stats/ │ │ │ │ │ │ ├── StatsFragment.kt │ │ │ │ │ │ ├── StatsAdapter.kt │ │ │ │ │ ├── blockscreen/ │ │ │ │ │ │ ├── BlockScreenActivity.kt │ │ │ │ └── ... │ │ └── res/ │ │ └── layout/... └── ...
+Digital-Detox-Challenge/
+
+├── .gitignore
+
+├── README.md
+
+├── build.gradle.kts
+
+├── gradle.properties
+
+├── gradlew
+
+├── gradlew.bat
+
+├── settings.gradle.kts
+
+├── app/
+
+│ ├── build.gradle.kts
+
+│ ├── src/
+
+│ │ ├── main/
+
+│ │ │ ├── AndroidManifest.xml
+
+│ │ │ ├── java/com/aleehatech/digitaldetoxchallange/
+
+│ │ │ │ ├── FocusModeAccessibilityService.kt
+
+│ │ │ │ ├── MainActivity.kt
+
+│ │ │ │ ├── ui/
+
+│ │ │ │ │ ├── auth/
+
+│ │ │ │ │ │ ├── SigninActivity.kt
+
+│ │ │ │ │ │ ├── SignupActivity.kt
+
+│ │ │ │ │ ├── home/
+
+│ │ │ │ │ │ ├── HomeFragment.kt
+
+│ │ │ │ │ │ ├── AppAdapter.kt
+
+│ │ │ │ │ ├── stats/
+
+│ │ │ │ │ │ ├── StatsFragment.kt
+
+│ │ │ │ │ │ ├── StatsAdapter.kt
+
+│ │ │ │ │ ├── blockscreen/
+
+│ │ │ │ │ │ ├── BlockScreenActivity.kt
+
+│ │ │ │ └── ...
+
+│ │ └── res/
+
+│ │ └── layout/...
+
+└── ...
+
 
 
 
