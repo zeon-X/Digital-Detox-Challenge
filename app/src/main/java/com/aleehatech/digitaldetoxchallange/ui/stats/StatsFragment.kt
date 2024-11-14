@@ -4,22 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.aleehatech.digitaldetoxchallange.databinding.FragmentStatsBinding
 
 class StatsFragment : Fragment() {
 
     private var _binding: FragmentStatsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var statsAdapter: StatsAdapter
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val statsViewModel =
@@ -28,10 +28,15 @@ class StatsFragment : Fragment() {
         _binding = FragmentStatsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textStats
-        statsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        recyclerView = binding.recyclerViewForStats
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Observe the app usage data
+        statsViewModel.apps.observe(viewLifecycleOwner) { appList ->
+            statsAdapter = StatsAdapter(requireContext(), appList)
+            recyclerView.adapter = statsAdapter
         }
+
         return root
     }
 
