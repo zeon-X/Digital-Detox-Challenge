@@ -90,3 +90,18 @@ Follow these steps to clone and set up the project on your local machine:
 6. **Build and Run**
 - Connect an Android device or use an emulator.
 - Click **Run** or use **Shift + F10** to build and deploy the app.
+
+
+## Screenshots
+
+### Below are some screenshots showcasing the app's functionality:
+
+| Feature |
+|-------------------------------------------- |-------------------------------------------- |-------------------------------------------- |
+
+| ![Screenshot_20241114_091758](https://github.com/user-attachments/assets/13c8f537-40c3-438f-a99b-eebd3c6c5fcc) | ![Screenshot_20241114_091737](https://github.com/user-attachments/assets/975e063f-b8dc-4b3d-ac7e-c5006cc382e2) | ![Screenshot_20241114_091820](https://github.com/user-attachments/assets/e18e79dd-47b0-4c48-ac97-e09cbade884e) |
+
+
+
+
+
