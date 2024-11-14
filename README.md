@@ -105,9 +105,8 @@ Follow these steps to clone and set up the project on your local machine:
 
 
 ## Acknowledgments
-
-    Thanks to Firebase for providing seamless authentication.
-    Special mention to the Android Developer Documentation for comprehensive guides.
+- Thanks to Firebase for providing seamless authentication.
+- Special mention to the Android Developer Documentation for comprehensive guides.
 
 
 
