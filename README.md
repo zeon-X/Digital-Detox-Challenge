@@ -1,4 +1,4 @@
-![Screenshot_20241114_091918](https://github.com/user-attachments/assets/ea6e0aa8-82a2-47dc-be50-ba523f7e8a0f)# Digital Detox Challenge
+# Digital Detox Challenge
 
 The **Digital Detox Challenge** app helps users manage their digital well-being by allowing them to temporarily suspend access to certain apps on their devices. With a simple and intuitive interface, users can set specific times to block distracting apps, track usage, and improve focus.
 
