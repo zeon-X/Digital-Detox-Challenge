@@ -98,9 +98,9 @@ Follow these steps to clone and set up the project on your local machine:
 
 | ScreenShots |ScreenShots |ScreenShots |
 |-------------------------------------------- |-------------------------------------------- |-------------------------------------------- |
-| ![Screenshot_20241114_091758](https://github.com/user-attachments/assets/13c8f537-40c3-438f-a99b-eebd3c6c5fcc) | ![Screenshot_20241114_091737](https://github.com/user-attachments/assets/975e063f-b8dc-4b3d-ac7e-c5006cc382e2) | ![Screenshot_20241114_091820](https://github.com/user-attachments/assets/e18e79dd-47b0-4c48-ac97-e09cbade884e) |
-|![Screenshot_20241114_091928](https://github.com/user-attachments/assets/106146cf-3f32-47bd-8e93-03a4869cc785)| ![Screenshot_20241114_091918](https://github.com/user-attachments/assets/38ddeea0-bcdc-4492-a777-41f84592c3f2) | ![Screenshot_20241114_091653](https://github.com/user-attachments/assets/2957b6f9-b9ff-4cb8-a923-79a42c2f9e9b)|
-|![Screenshot_20241114_091938](https://github.com/user-attachments/assets/296eaec2-a96f-41f3-84b9-3b62d2999468)|![Screenshot_20241114_091949](https://github.com/user-attachments/assets/49c2f945-dcaf-4d85-a108-2a377194b8c5)|![Screenshot_20241114_092003](https://github.com/user-attachments/assets/0dc9a14c-1513-4c16-bbaa-d947640fe832)|
+| ![Screenshot_20241114_091918](https://github.com/user-attachments/assets/38ddeea0-bcdc-4492-a777-41f84592c3f2) |![Screenshot_20241114_092003](https://github.com/user-attachments/assets/0dc9a14c-1513-4c16-bbaa-d947640fe832)| ![Screenshot_20241114_091758](https://github.com/user-attachments/assets/13c8f537-40c3-438f-a99b-eebd3c6c5fcc) | 
+| ![Screenshot_20241114_091737](https://github.com/user-attachments/assets/975e063f-b8dc-4b3d-ac7e-c5006cc382e2) |  ![Screenshot_20241114_091820](https://github.com/user-attachments/assets/e18e79dd-47b0-4c48-ac97-e09cbade884e) | ![Screenshot_20241114_091928](https://github.com/user-attachments/assets/106146cf-3f32-47bd-8e93-03a4869cc785) |
+| ![Screenshot_20241114_091653](https://github.com/user-attachments/assets/2957b6f9-b9ff-4cb8-a923-79a42c2f9e9b) | ![Screenshot_20241114_091938](https://github.com/user-attachments/assets/296eaec2-a96f-41f3-84b9-3b62d2999468) | ![Screenshot_20241114_091949](https://github.com/user-attachments/assets/49c2f945-dcaf-4d85-a108-2a377194b8c5)|
 
 
 
