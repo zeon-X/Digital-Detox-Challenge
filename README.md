@@ -14,6 +14,14 @@ The **Digital Detox Challenge** app helps users manage their digital well-being 
 
 ---
 
+## Project architecture
+
+| Workflow |
+|__________|
+|![Frame 22](https://github.com/user-attachments/assets/c99373bb-f454-4edf-8895-c42cc7053045)|
+
+---
+
 ## Project Structure
 ```bash
 Digital-Detox-Challenge/
