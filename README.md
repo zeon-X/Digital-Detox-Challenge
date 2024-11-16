@@ -77,7 +77,7 @@ Follow these steps to clone and set up the project on your local machine:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/Digital-Detox-Challenge.git
+   git clone https://github.com/zeon-X/Digital-Detox-Challenge.git
    cd Digital-Detox-Challenge
 2. **Open the Project in Android Studio**
 - Start Android Studio and select **Open an existing Android Studio project**.
