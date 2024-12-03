@@ -34,7 +34,39 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextEmailAddress"
+                android:id="@+id/editTextFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="Your full name"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginVertical="6dp">
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="Your phone will country code"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -106,7 +138,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Password should contain at least 1 uppercase, 1 lowercase, 1 digit, 1 special character"
+                android:text="Password should contain at least 1 uppercase, 1 lowercase, 1 digit, 1 special character and must be 8 charecter long"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:layout_weight="10"/>

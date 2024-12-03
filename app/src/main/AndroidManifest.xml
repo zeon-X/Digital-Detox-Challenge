@@ -33,11 +33,20 @@
             </intent-filter>
         </activity>
 
+
+        <!--    OTP Verification    -->
+        <activity
+            android:name=".ui.auth.OtpVerificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar"/>
+
+
         <!--    Sign Up Declaration    -->
         <activity
             android:name=".ui.auth.SignupActivity"
             android:exported="true"
             android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar"/>
+
 
         <!-- Main Activity Declaration -->
         <activity

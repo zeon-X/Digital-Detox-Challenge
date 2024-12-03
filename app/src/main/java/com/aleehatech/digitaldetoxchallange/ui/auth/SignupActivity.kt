@@ -1,115 +1,142 @@
 package com.aleehatech.digitaldetoxchallange.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Log
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.aleehatech.digitaldetoxchallange.MainActivity
 import com.aleehatech.digitaldetoxchallange.R
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignupActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var fullNameEditText: EditText
+    private lateinit var phoneEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var repeatPasswordEditText: EditText
     private lateinit var signUpButton: Button
-    private lateinit var linkGoToLogin: TextView
+    private lateinit var errorIcon: ImageView
+    private lateinit var errorMessage: TextView
+    private lateinit var goToLoginText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup_screen)
 
-        // Initialize Firebase Auth
-        auth = FirebaseAuth.getInstance()
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
 
-        // Check if the user is already signed in
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            // If user is already signed in, navigate to MainActivity
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()  // Finish the SigninActivity so the user can't go back to it
-            return
-        }
-
-        // Find UI elements
-        emailEditText = findViewById(R.id.editTextEmailAddress)
+        // Initialize Views
+        fullNameEditText = findViewById(R.id.editTextFullName)
+        phoneEditText = findViewById(R.id.editTextPhone)
+        emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
         repeatPasswordEditText = findViewById(R.id.editTextRepeatPassword)
         signUpButton = findViewById(R.id.signup_btn)
-        linkGoToLogin = findViewById(R.id.link_go_to_login)  // Initialize the TextView
+        errorIcon = findViewById(R.id.signup_error_icon)
+        errorMessage = findViewById(R.id.signup_error_message)
+        goToLoginText = findViewById(R.id.link_go_to_login)
 
+        // Set initial error visibility to GONE
+        errorIcon.visibility = ImageView.GONE
+        errorMessage.visibility = TextView.GONE
 
-        // Set up sign-up button click listener
+        // Sign Up button click listener
         signUpButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            val repeatPassword = repeatPasswordEditText.text.toString()
-
-            if (!isValidEmail(email)) {
-                Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
-            } else if (!isValidPassword(password)) {
-                Toast.makeText(
-                    this,
-                    "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else if (password != repeatPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-            } else {
-                signUpUser(email, password)
-            }
+            validateAndSignUp()
         }
 
-
-        // Set up the "Already have an account? Login here" click listener
-        linkGoToLogin.setOnClickListener {
-            // Navigate to SignInActivity
-            val intent = Intent(this, SigninActivity::class.java)
-            startActivity(intent)
+        // Navigate to Login
+        goToLoginText.setOnClickListener {
+            finish() // Close this activity and go back to the login screen
         }
-
     }
 
+    private fun validateAndSignUp() {
+        val fullName = fullNameEditText.text.toString().trim()
+        val phone = phoneEditText.text.toString().trim()
+        val email = emailEditText.text.toString().trim()
+        val password = passwordEditText.text.toString().trim()
+        val repeatPassword = repeatPasswordEditText.text.toString().trim()
 
+        // Validate inputs
+        if (fullName.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
+            showError("All fields are required.")
+            return
+        }
+        if (password != repeatPassword) {
+            showError("Passwords do not match.")
+            return
+        }
+        if (!isValidPassword(password)) {
+            showError("Password must contain at least 1 uppercase, 1 lowercase, 1 digit, 1 special character, and must be 8 characters long.")
+            return
+        }
 
-    // Password validation
+        // Save user to Firestore
+        saveUserToFirestore(fullName, phone, email, password)
+    }
+
     private fun isValidPassword(password: String): Boolean {
-        val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}$"
-        val passwordMatcher = Regex(passwordPattern)
-        return passwordMatcher.find(password) != null
+        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=]).{8,}\$")
+        return passwordPattern.matches(password)
     }
 
-    // Email validation (basic pattern)
-    private fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun showError(message: String) {
+        errorIcon.visibility = ImageView.VISIBLE
+        errorMessage.visibility = TextView.VISIBLE
+        errorMessage.text = message
+
+
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun signUpUser(email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show()
-                    // Navigate to next screen or main activity here
+    private fun saveUserToFirestore(fullName: String, phone: String, email: String, password: String) {
+        // Reference to Firestore collection
+        val userRef = firestore.collection("users").document(email)  // Using email as document ID
 
-                    // Create an Intent to navigate to the MainActivity
-                    val intent = Intent(this, MainActivity::class.java)
-                    // Optionally, clear the activity stack if you don't want the user to come back to the sign-up screen
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    // Start the MainActivity
-                    startActivity(intent)
+        // Check if the email already exists in Firestore
+        userRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                // Email already exists
+                showError("Email is already registered.")
 
-                    // Finish the current SignUpActivity so the user cannot go back to it
-                    finish()
-                } else {
-                    Toast.makeText(this, "Sign up failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
+            } else {
+                // Email is unique, proceed to save the user
+                val user = hashMapOf(
+                    "fullname" to fullName,
+                    "phone" to phone,
+                    "email" to email,
+                    "password" to password // Store password securely in real apps (e.g., hashed)
+                )
+
+                // Save the user data using the email as the document ID
+                userRef.set(user)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                        clearFields()
+                    }
+                    .addOnFailureListener { e ->
+                        showError("Error saving user: ${e.message}")
+                    }
             }
+        }
+            .addOnFailureListener { e ->
+                showError("Error checking email uniqueness: ${e.message}")
+            }
+    }
+
+
+
+
+    private fun clearFields() {
+        fullNameEditText.text.clear()
+        phoneEditText.text.clear()
+        emailEditText.text.clear()
+        passwordEditText.text.clear()
+        repeatPasswordEditText.text.clear()
+        errorIcon.visibility = ImageView.GONE
+        errorMessage.visibility = TextView.GONE
     }
 }
