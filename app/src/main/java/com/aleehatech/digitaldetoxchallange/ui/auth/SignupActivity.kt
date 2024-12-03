@@ -1,9 +1,11 @@
 package com.aleehatech.digitaldetoxchallange.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.aleehatech.digitaldetoxchallange.MainActivity
 import com.aleehatech.digitaldetoxchallange.R
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -115,6 +117,9 @@ class SignupActivity : AppCompatActivity() {
                 userRef.set(user)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, SigninActivity::class.java)
+                        startActivity(intent)
+                        finish()
                         clearFields()
                     }
                     .addOnFailureListener { e ->

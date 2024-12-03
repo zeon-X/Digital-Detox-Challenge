@@ -62,7 +62,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun sendOTP(phoneNumber: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber) // Phone number to verify
-            .setTimeout(600L, TimeUnit.SECONDS) // Timeout duration
+            .setTimeout(120L, TimeUnit.SECONDS) // Timeout duration
             .setActivity(this) // Activity (for callback binding)
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
