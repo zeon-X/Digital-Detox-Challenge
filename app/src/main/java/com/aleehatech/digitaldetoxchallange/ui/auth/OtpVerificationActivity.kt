@@ -33,8 +33,8 @@ class OtpVerificationActivity : AppCompatActivity() {
         phoneNumber = intent.getStringExtra("phone")
 
         // Find UI elements
-        otpEditText = findViewById(R.id.editTextOTP)
-        verifyButton = findViewById(R.id.otp_verification_btn)
+        otpEditText = findViewById(R.id.otp_input)
+        verifyButton = findViewById(R.id.verify_button)
 
         // Start the phone number verification process
         phoneNumber?.let {

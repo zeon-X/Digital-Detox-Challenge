@@ -35,7 +35,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextOTP"
+                android:id="@+id/otp_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -55,7 +55,7 @@
 
         <Button
             android:layout_marginTop="14dp"
-            android:id="@+id/otp_verification_btn"
+            android:id="@+id/verify_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/app_sec"

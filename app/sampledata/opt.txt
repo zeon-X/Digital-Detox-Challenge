@@ -1,0 +1,116 @@
+package com.aleehatech.digitaldetoxchallange.ui.auth
+
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.aleehatech.digitaldetoxchallange.R
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
+import java.util.concurrent.TimeUnit
+
+class OtpVerificationActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var phoneNumber: String
+    private var storedVerificationId: String? = null
+    private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.otp_verification_screen)
+
+        auth = FirebaseAuth.getInstance()
+        auth.useAppLanguage() // Set to device's default language
+
+        phoneNumber = intent.getStringExtra("phoneNumber") ?: ""
+        if (phoneNumber.isEmpty()) {
+            Toast.makeText(this, "Phone number missing!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        startPhoneNumberVerification(phoneNumber)
+
+        findViewById<Button>(R.id.verify_button).setOnClickListener {
+            val otp = findViewById<EditText>(R.id.otp_input).text.toString()
+            if (otp.isNotEmpty() && storedVerificationId != null) {
+                verifyPhoneNumberWithCode(storedVerificationId!!, otp)
+            } else {
+                Toast.makeText(this, "Enter OTP to verify!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+//        findViewById<Button>(R.id.resend_button).setOnClickListener {
+//            resendVerificationCode(phoneNumber, resendToken)
+//        }
+    }
+
+    private fun startPhoneNumberVerification(phoneNumber: String) {
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(callbacks)
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            Log.d("OTP", "Verification completed: $credential")
+            signInWithPhoneAuthCredential(credential)
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            Log.e("OTP", "Verification failed", e)
+            when (e) {
+                is FirebaseAuthInvalidCredentialsException -> Toast.makeText(this@OtpVerificationActivity, "Invalid phone number!", Toast.LENGTH_SHORT).show()
+                is FirebaseTooManyRequestsException -> Toast.makeText(this@OtpVerificationActivity, "SMS quota exceeded!", Toast.LENGTH_SHORT).show()
+                is FirebaseAuthMissingActivityForRecaptchaException -> Toast.makeText(this@OtpVerificationActivity, "ReCAPTCHA setup issue!", Toast.LENGTH_SHORT).show()
+                else -> Toast.makeText(this@OtpVerificationActivity, "Verification failed!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+            Log.d("OTP", "Code sent: $verificationId")
+            storedVerificationId = verificationId
+            resendToken = token
+        }
+    }
+
+    private fun verifyPhoneNumberWithCode(verificationId: String, code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId, code)
+        signInWithPhoneAuthCredential(credential)
+    }
+
+    private fun resendVerificationCode(phoneNumber: String, token: PhoneAuthProvider.ForceResendingToken) {
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(callbacks)
+            .setForceResendingToken(token)
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d("OTP", "Sign-in successful!")
+                    val user = task.result?.user
+                    Toast.makeText(this, "Welcome, ${user?.phoneNumber}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.e("OTP", "Sign-in failed", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        Toast.makeText(this, "Invalid verification code!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+    }
+}
