@@ -31,6 +31,10 @@ class OtpVerificationActivity : AppCompatActivity() {
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance()
 
+        // Force reCAPTCHA flow for testing
+        auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(false)  // Ensure testing is enabled for reCAPTCHA
+
+
         // Get phone number from intent
         phoneNumber = intent.getStringExtra("phone")
 
@@ -61,7 +65,11 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
     }
 
+
+
+
     private fun sendOTP(phoneNumber: String) {
+
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout duration
@@ -90,6 +98,9 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
+
+
+
 
     private fun verifyOTP(verificationId: String, otp: String) {
         val credential = PhoneAuthProvider.getCredential(verificationId, otp)
