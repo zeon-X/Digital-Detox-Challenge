@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.aleehatech.digitaldetoxchallange.MainActivity
 import com.aleehatech.digitaldetoxchallange.R
 import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -23,6 +26,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var verifyButton: Button
     private var phoneNumber: String? = null
     private var verificationId: String? = null
+    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +34,8 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance()
+        auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
 
-        // Force reCAPTCHA flow for testing
-        auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(false)  // Ensure testing is enabled for reCAPTCHA
 
 
         // Get phone number from intent
@@ -69,28 +72,38 @@ class OtpVerificationActivity : AppCompatActivity() {
 
 
     private fun sendOTP(phoneNumber: String) {
-
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout duration
             .setActivity(this) // Activity (for callback binding)
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                    // Auto-retrieval or instant verification
+                    Log.d("PhoneAuth", "Verification completed: $credential")
                     signInWithPhoneAuthCredential(credential)
                 }
 
                 override fun onVerificationFailed(e: FirebaseException) {
-                    Toast.makeText(this@OtpVerificationActivity, "Verification failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     Log.e("PhoneAuth", "Verification failed", e)
+                    when (e) {
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            Toast.makeText(this@OtpVerificationActivity, "Invalid request. Check phone number.", Toast.LENGTH_SHORT).show()
+                        }
+                        is FirebaseTooManyRequestsException -> {
+                            Toast.makeText(this@OtpVerificationActivity, "SMS quota exceeded. Try later.", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            Toast.makeText(this@OtpVerificationActivity, "Verification failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
 
                 override fun onCodeSent(
                     verificationId: String,
                     token: PhoneAuthProvider.ForceResendingToken
                 ) {
-                    // Save the verification ID to verify later
+                    Log.d("PhoneAuth", "Code sent: $verificationId")
                     this@OtpVerificationActivity.verificationId = verificationId
+                    this@OtpVerificationActivity.resendToken = token
                     Toast.makeText(this@OtpVerificationActivity, "OTP sent to $phoneNumber", Toast.LENGTH_SHORT).show()
                 }
             })
