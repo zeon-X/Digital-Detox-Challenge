@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "55419258221",
-    "project_id": "digitaldetoxauth",
-    "storage_bucket": "digitaldetoxauth.firebasestorage.app"
+    "project_number": "305381332190",
+    "project_id": "digitaldetoxchallenge-6a50f",
+    "storage_bucket": "digitaldetoxchallenge-6a50f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:55419258221:android:71099b5f0ee32268384664",
+        "mobilesdk_app_id": "1:305381332190:android:9d1c925bab21bac1b81e4f",
         "android_client_info": {
           "package_name": "com.aleehatech.digitaldetoxchallange"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCb_U78ShbxwoBgbjmAjO6YfcVnFVgjz_0"
+          "current_key": "AIzaSyAdt3hBbnmRULh2mh1_9vG3vZBjOOdxRpc"
         }
       ],
       "services": {
