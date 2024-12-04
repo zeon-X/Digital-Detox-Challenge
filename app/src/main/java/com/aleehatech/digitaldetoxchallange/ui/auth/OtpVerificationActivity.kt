@@ -1,11 +1,13 @@
 package com.aleehatech.digitaldetoxchallange.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.aleehatech.digitaldetoxchallange.MainActivity
 import com.aleehatech.digitaldetoxchallange.R
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -62,7 +64,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun sendOTP(phoneNumber: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber) // Phone number to verify
-            .setTimeout(120L, TimeUnit.SECONDS) // Timeout duration
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout duration
             .setActivity(this) // Activity (for callback binding)
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -100,6 +102,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Toast.makeText(this, "OTP verified successfully!", Toast.LENGTH_SHORT).show()
                     // Navigate to the main activity or next screen
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
                     finish()
                 } else {
                     Toast.makeText(this, "Invalid OTP: ${task.exception?.message}", Toast.LENGTH_SHORT).show()

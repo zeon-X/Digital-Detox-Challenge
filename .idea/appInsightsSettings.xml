@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.aleehatech.digitaldetoxchallange" />
-                  <option name="mobileSdkAppId" value="1:55419258221:android:71099b5f0ee32268384664" />
-                  <option name="projectId" value="digitaldetoxauth" />
-                  <option name="projectNumber" value="55419258221" />
+                  <option name="mobileSdkAppId" value="1:305381332190:android:9d1c925bab21bac1b81e4f" />
+                  <option name="projectId" value="digitaldetoxchallenge-6a50f" />
+                  <option name="projectNumber" value="305381332190" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

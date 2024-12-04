@@ -36,7 +36,9 @@
 
         <!--    OTP Verification    -->
         <activity
-            android:name=".ui.auth.OtpVerificationActivity"/>
+            android:name=".ui.auth.OtpVerificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DigitalDetoxChallange.NoActionBar"/>
 
 
         <!--    Sign Up Declaration    -->
