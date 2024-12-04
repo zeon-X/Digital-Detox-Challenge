@@ -1,5 +1,6 @@
 package com.aleehatech.digitaldetoxchallange.ui.auth
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,8 @@ class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var verifyButton: Button
     private var phoneNumber: String? = null
     private var verificationId: String? = null
-    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+
+    private val RECAPTCHA_REQUEST_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +36,19 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance()
-        auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
 
+        // Check if the user is already signed in
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            navigateToMainActivity()
+            return
+        }
+
+
+
+
+        // Force reCAPTCHA flow
+        auth.getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true)
 
 
         // Get phone number from intent
@@ -69,6 +82,22 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RECAPTCHA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // reCAPTCHA verification successful
+                // Continue with phone number verification
+                phoneNumber?.let {
+                    sendOTP(it)
+                }
+            } else {
+                // reCAPTCHA verification failed
+                Toast.makeText(this, "reCAPTCHA verification failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     private fun sendOTP(phoneNumber: String) {
@@ -84,6 +113,11 @@ class OtpVerificationActivity : AppCompatActivity() {
 
                 override fun onVerificationFailed(e: FirebaseException) {
                     Log.e("PhoneAuth", "Verification failed", e)
+                    if (e is FirebaseAuthMissingActivityForRecaptchaException) {
+                        // Get the reCAPTCHA intent and start it
+//                        startActivityForResult(e.intent, RECAPTCHA_REQUEST_CODE)
+                    }
+
                     when (e) {
                         is FirebaseAuthInvalidCredentialsException -> {
                             Toast.makeText(this@OtpVerificationActivity, "Invalid request. Check phone number.", Toast.LENGTH_SHORT).show()
@@ -91,10 +125,13 @@ class OtpVerificationActivity : AppCompatActivity() {
                         is FirebaseTooManyRequestsException -> {
                             Toast.makeText(this@OtpVerificationActivity, "SMS quota exceeded. Try later.", Toast.LENGTH_SHORT).show()
                         }
+
+
                         else -> {
                             Toast.makeText(this@OtpVerificationActivity, "Verification failed: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
+
                 }
 
                 override fun onCodeSent(
@@ -103,7 +140,6 @@ class OtpVerificationActivity : AppCompatActivity() {
                 ) {
                     Log.d("PhoneAuth", "Code sent: $verificationId")
                     this@OtpVerificationActivity.verificationId = verificationId
-                    this@OtpVerificationActivity.resendToken = token
                     Toast.makeText(this@OtpVerificationActivity, "OTP sent to $phoneNumber", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -133,5 +169,11 @@ class OtpVerificationActivity : AppCompatActivity() {
                     Toast.makeText(this, "Invalid OTP: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
